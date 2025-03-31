@@ -18,7 +18,7 @@ struct EditProjectView: View {
             DatePicker("Date", selection: $project.date)
             
             Stepper(value: $project.stars, in: 0...Int.max) {
-                Text("Stars: \($project.stars)")
+                Text("Stars: \($project.stars.wrappedValue)")
             }
         }
         .navigationTitle(Constants.editProject)

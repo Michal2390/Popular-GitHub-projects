@@ -10,32 +10,32 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) var modelContext
-    @Query(sort: \Project.stars, order: .reverse) var projects: [Project]
+    
     @State private var path = [Project]()
+    @State private var sortOrder = SortDescriptor(\Project.name)
     
     var body: some View {
         NavigationStack(path: $path) {
-            List {
-                ForEach(projects) { project in
-                    NavigationLink(value: project) {
-                        VStack(alignment: .leading) {
-                            Text(project.name)
-                                .font(.headline)
+            ProjectListingView(sort: sortOrder)
+                .navigationTitle(Constants.navigationTitle)
+                .navigationDestination(for: Project.self, destination: EditProjectView.init)
+                .toolbar {
+                    Button("Add Project", systemImage: "plus", action: addProject)
+                    
+                    Menu("Sort", systemImage: "arrow.up.arrow.down") {
+                        Picker("Sort", selection: $sortOrder) {
+                            Text("Name")
+                                .tag(SortDescriptor(\Project.name))
                             
-                            Text(project.details)
-                                .font(.caption)
+                            Text("Stars")
+                                .tag(SortDescriptor(\Project.stars, order: .reverse))
                             
-                            Text(project.date.formatted(date: .long, time: .shortened))
+                            Text("Date")
+                                .tag(SortDescriptor(\Project.date))
                         }
+                        .pickerStyle(.inline)
                     }
                 }
-                .onDelete(perform: deleteProjects)
-            }
-            .navigationTitle(Constants.navigationTitle)
-            .navigationDestination(for: Project.self, destination: EditProjectView.init)
-            .toolbar {
-                Button("Add Project", systemImage: "plus", action: addProject)
-            }
         }
     }
     
@@ -43,13 +43,6 @@ struct ContentView: View {
         let project = Project()
         modelContext.insert(project)
         path = [project]
-    }
-    
-    func deleteProjects(_ indexSet: IndexSet) {
-        for index in indexSet {
-            let project = projects[index]
-            modelContext.delete(project)
-        }
     }
 }
 
