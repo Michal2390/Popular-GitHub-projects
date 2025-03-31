@@ -38,8 +38,15 @@ struct ProjectListingView: View {
         }
     }
     
-    init(sort: SortDescriptor<Project>) {
-        _projects = Query(sort: [sort]) // _projects is a query object and we want that in this case, not an array
+    init(sort: SortDescriptor<Project>, searchString: String) {
+        _projects = Query(filter: #Predicate {
+            if searchString.isEmpty {
+                return true
+            } else {
+                return $0.name.localizedStandardContains(searchString)
+            }
+            //$0.stars >= 100
+        },sort: [sort]) // _projects is a query object and we want that in this case, not an array
     }
     
     func deleteProjects(_ indexSet: IndexSet) {
@@ -51,5 +58,5 @@ struct ProjectListingView: View {
 }
 
 #Preview {
-    ProjectListingView(sort: SortDescriptor(\Project.name))
+    ProjectListingView(sort: SortDescriptor(\Project.name), searchString: "")
 }

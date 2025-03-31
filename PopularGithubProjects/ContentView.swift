@@ -13,12 +13,14 @@ struct ContentView: View {
     
     @State private var path = [Project]()
     @State private var sortOrder = SortDescriptor(\Project.name)
+    @State private var searchText = ""
     
     var body: some View {
         NavigationStack(path: $path) {
-            ProjectListingView(sort: sortOrder)
+            ProjectListingView(sort: sortOrder, searchString: searchText)
                 .navigationTitle(Constants.navigationTitle)
                 .navigationDestination(for: Project.self, destination: EditProjectView.init)
+                .searchable(text: $searchText)
                 .toolbar {
                     Button("Add Project", systemImage: "plus", action: addProject)
                     
