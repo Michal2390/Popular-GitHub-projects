@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct PopularGithubProjectsApp: App {
@@ -13,5 +14,6 @@ struct PopularGithubProjectsApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: Project.self)
     }
 }
