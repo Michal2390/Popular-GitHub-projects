@@ -12,8 +12,12 @@ import SwiftData
 struct PopularGithubProjectsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
         }
-        .modelContainer(for: Project.self)
+        .modelContainer(for: [
+            ProjectEntity.self,
+            OwnerEntity.self,
+            LicenseEntity.self
+        ])
     }
 }
