@@ -11,20 +11,25 @@ import SwiftUI
 struct ProjectListingView: View {
     @StateObject private var viewModel = ProjectViewModel()
     @Environment(\.modelContext) var modelContext
+    @Environment(\.horizontalSizeClass) var sizeClass
     let sort: SortDescriptor<ProjectEntity>
     let searchString: String
     
     @Query(sort: [SortDescriptor(\ProjectEntity.stars, order: .reverse), SortDescriptor(\ProjectEntity.name)]) var projects: [ProjectEntity]
+    @Namespace private var animation
     
     var body: some View {
         Group {
             switch viewModel.state {
             case .loading:
                 loadingView
+                    .transition(.opacity)
             case .loaded(let projects):
                 projectListView(projects)
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
             case .error(let error):
                 errorView(error)
+                    .transition(.scale)
             }
         }
         .navigationTitle("Trending Projects")
@@ -35,7 +40,9 @@ struct ProjectListingView: View {
             await viewModel.fetchTrendingProjects()
         }
         .onChange(of: searchString) { _, newValue in
-            viewModel.filterProjects(with: newValue)
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                viewModel.filterProjects(with: newValue)
+            }
         }
     }
     
@@ -45,6 +52,7 @@ struct ProjectListingView: View {
                 placeholderProjectList
             }
             ProgressView()
+                .scaleEffect(1.5)
         }
     }
     
@@ -53,14 +61,26 @@ struct ProjectListingView: View {
             ForEach(projects.prefix(10), id: \.id) { project in
                 ProjectRowView(project: project.toModel())
                     .redacted(reason: .placeholder)
+                    .shimmering()
             }
         }
+        .padding(.horizontal)
     }
     
     private func projectListView(_ projects: [ProjectModel]) -> some View {
         ScrollView {
             LazyVStack(spacing: 16) {
-                projectRows(projects)
+                if sizeClass == .regular {
+                    // iPad Layout
+                    LazyVGrid(columns: [
+                        GridItem(.adaptive(minimum: 300, maximum: 400), spacing: 16)
+                    ], spacing: 16) {
+                        projectRows(projects)
+                    }
+                } else {
+                    // iPhone Layout
+                    projectRows(projects)
+                }
                 loadingIndicator
             }
             .padding(.horizontal)
@@ -71,6 +91,7 @@ struct ProjectListingView: View {
         .overlay {
             if projects.isEmpty {
                 ContentUnavailableView.search
+                    .transition(.scale.combined(with: .opacity))
             }
         }
     }
@@ -79,6 +100,7 @@ struct ProjectListingView: View {
         ForEach(projects, id: \.id) { project in
             NavigationLink(value: project) {
                 ProjectRowView(project: project)
+                    .matchedGeometryEffect(id: project.id, in: animation)
                     .onAppear {
                         Task {
                             await viewModel.loadMoreProjectsIfNeeded(
@@ -88,6 +110,7 @@ struct ProjectListingView: View {
                         }
                     }
             }
+            .transition(.scale(scale: 0.9).combined(with: .opacity))
         }
     }
     

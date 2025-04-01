@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProjectRowView: View {
     let project: ProjectModel
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -20,9 +21,11 @@ struct ProjectRowView: View {
                 } placeholder: {
                     Image(systemName: "person.circle.fill")
                         .resizable()
+                        .foregroundStyle(.secondary)
                 }
                 .frame(width: 40, height: 40)
                 .clipShape(Circle())
+                .shadow(radius: 2)
                 
                 VStack(alignment: .leading) {
                     Text(project.name)
@@ -56,7 +59,14 @@ struct ProjectRowView: View {
             }
             .font(.caption)
         }
-        .padding(.vertical, 4)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(colorScheme == .dark ? Color(.systemGray6) : .white)
+                .shadow(radius: 2)
+        )
+        .contentShape(RoundedRectangle(cornerRadius: 12))
+        .transition(.scale.combined(with: .opacity))
     }
 }
 

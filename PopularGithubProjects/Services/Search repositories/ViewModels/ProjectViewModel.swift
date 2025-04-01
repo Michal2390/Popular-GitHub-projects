@@ -85,7 +85,6 @@ class ProjectViewModel: ObservableObject {
             // If loading more fails, we'll just stop pagination but keep existing data
             hasMorePages = false
         }
-        
         isLoadingMore = false
     }
 }
