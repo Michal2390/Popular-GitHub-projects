@@ -11,6 +11,8 @@ import SwiftUI
 struct ProjectListingView: View {
     @StateObject private var viewModel = ProjectViewModel()
     @Environment(\.modelContext) var modelContext
+    let sort: SortDescriptor<ProjectEntity>
+    let searchString: String
     
     @Query(sort: [SortDescriptor(\ProjectEntity.stars, order: .reverse), SortDescriptor(\ProjectEntity.name)]) var projects: [ProjectEntity]
     
@@ -31,6 +33,9 @@ struct ProjectListingView: View {
         }
         .task {
             await viewModel.fetchTrendingProjects()
+        }
+        .onChange(of: searchString) { _, newValue in
+            viewModel.filterProjects(with: newValue)
         }
     }
     
@@ -62,6 +67,11 @@ struct ProjectListingView: View {
         }
         .refreshable {
             await viewModel.fetchTrendingProjects()
+        }
+        .overlay {
+            if projects.isEmpty {
+                ContentUnavailableView.search
+            }
         }
     }
     
@@ -112,11 +122,15 @@ struct ProjectListingView: View {
     }
     
     init(sort: SortDescriptor<ProjectEntity>, searchString: String) {
-        _projects = Query(filter: #Predicate {
+        self.sort = sort
+        self.searchString = searchString
+        _projects = Query(filter: #Predicate<ProjectEntity> { project in
             if searchString.isEmpty {
                 return true
             } else {
-                return $0.name.localizedStandardContains(searchString)
+                return project.name.localizedStandardContains(searchString) ||
+                       project.fullName.localizedStandardContains(searchString) ||
+                       (project.projectDescription?.localizedStandardContains(searchString) ?? false)
             }
         }, sort: [sort])
     }

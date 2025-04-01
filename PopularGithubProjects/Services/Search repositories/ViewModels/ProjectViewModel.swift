@@ -20,6 +20,7 @@ class ProjectViewModel: ObservableObject {
     private var currentPage = 1
     private var isLoadingMore = false
     private var hasMorePages = true
+    private var allProjects: [ProjectModel] = []
     
     init(networkManager: Networking = NetworkManager()) {
         self.networkManager = networkManager
@@ -32,11 +33,27 @@ class ProjectViewModel: ObservableObject {
         hasMorePages = true
         
         do {
-            let projects = try await networkManager.fetchTrendingRepositories(page: currentPage)
-            state = .loaded(projects)
+            allProjects = try await networkManager.fetchTrendingRepositories(page: currentPage)
+            state = .loaded(allProjects)
         } catch {
             state = .error(error.localizedDescription)
         }
+    }
+    
+    @MainActor
+    func filterProjects(with searchText: String) {
+        guard !searchText.isEmpty else {
+            state = .loaded(allProjects)
+            return
+        }
+        
+        let filteredProjects = allProjects.filter { project in
+            project.name.localizedStandardContains(searchText) ||
+            project.fullName.localizedStandardContains(searchText) ||
+            (project.description?.localizedStandardContains(searchText) ?? false)
+        }
+        
+        state = .loaded(filteredProjects)
     }
     
     @MainActor
@@ -61,7 +78,8 @@ class ProjectViewModel: ObservableObject {
             if newProjects.isEmpty {
                 hasMorePages = false
             } else {
-                state = .loaded(currentProjects + newProjects)
+                allProjects.append(contentsOf: newProjects)
+                state = .loaded(allProjects)
             }
         } catch {
             // If loading more fails, we'll just stop pagination but keep existing data
