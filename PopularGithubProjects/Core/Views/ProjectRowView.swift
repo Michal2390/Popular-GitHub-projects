@@ -30,41 +30,69 @@ struct ProjectRowView: View {
                 VStack(alignment: .leading) {
                     Text(project.name)
                         .font(.headline)
+                        .foregroundColor(colorScheme == .dark ? .white : .primary)
                     if let owner = project.owner {
                         Text(owner.login)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                 }
+                Spacer(minLength: 0)
             }
             
             if let description = project.description {
                 Text(description)
                     .font(.subheadline)
+                    .foregroundColor(colorScheme == .dark ? .white : .primary)
                     .lineLimit(2)
+            } else {
+                Text("No description available")
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
+                    .italic()
             }
             
+            Spacer(minLength: 16)
+            
             HStack(spacing: 16) {
-                Label("\(project.stars)", systemImage: "star.fill")
-                    .foregroundStyle(.yellow)
-                
-                if let language = project.language {
-                    Label(language, systemImage: "circle.fill")
-                        .foregroundStyle(.blue)
+                Label {
+                    Text("\(project.stars)")
+                        .foregroundColor(colorScheme == .dark ? .white : .primary)
+                } icon: {
+                    Image(systemName: "star.fill")
+                        .foregroundStyle(.yellow)
                 }
                 
-                Label("\(project.forksCount)", systemImage: "tuningfork")
-                    .foregroundStyle(.gray)
+                if let language = project.language {
+                    Label {
+                        Text(language)
+                            .foregroundColor(colorScheme == .dark ? .white : .primary)
+                    } icon: {
+                        Image(systemName: "circle.fill")
+                            .foregroundStyle(.blue)
+                    }
+                }
+                
+                Label {
+                    Text("\(project.forksCount)")
+                        .foregroundColor(colorScheme == .dark ? .white : .primary)
+                } icon: {
+                    Image(systemName: "tuningfork")
+                        .foregroundStyle(.gray)
+                }
+                
+                Spacer(minLength: 0)
             }
             .font(.caption)
         }
         .padding()
+        .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(colorScheme == .dark ? Color(.systemGray6) : .white)
-                .shadow(radius: 2)
+                .fill(colorScheme == .dark ? Color(.secondarySystemGroupedBackground) : .white)
         )
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(color: colorScheme == .dark ? .clear : .black.opacity(0.1), radius: 2, y: 1)
         .contentShape(RoundedRectangle(cornerRadius: 12))
         .transition(.scale.combined(with: .opacity))
     }

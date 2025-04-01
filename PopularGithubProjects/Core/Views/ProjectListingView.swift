@@ -12,6 +12,7 @@ struct ProjectListingView: View {
     @StateObject private var viewModel = ProjectViewModel()
     @Environment(\.modelContext) var modelContext
     @Environment(\.horizontalSizeClass) var sizeClass
+    @Environment(\.colorScheme) var colorScheme
     let sort: SortDescriptor<ProjectEntity>
     let searchString: String
     
@@ -94,6 +95,7 @@ struct ProjectListingView: View {
                     .transition(.scale.combined(with: .opacity))
             }
         }
+        .background(Color(.systemGroupedBackground))
     }
     
     private func projectRows(_ projects: [ProjectModel]) -> some View {
