@@ -28,9 +28,13 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="PopularGHProjAppIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Wdb-LP-ew2">
-                                <rect key="frame" x="28" y="322" width="337" height="209"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PopularGHProjAppIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Wdb-LP-ew2">
+                                <rect key="frame" x="28" y="321.66666666666669" width="337" height="209.00000000000006"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Wdb-LP-ew2" secondAttribute="height" multiplier="337:209" id="3GS-jw-go0"/>
+                                    <constraint firstAttribute="width" secondItem="Wdb-LP-ew2" secondAttribute="height" multiplier="337:209" id="gM3-3k-CZE"/>
+                                    <constraint firstAttribute="height" constant="209" id="unG-gF-VC3"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
@@ -39,7 +43,11 @@
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="centerX" secondItem="obG-Y5-kRd" secondAttribute="centerX" id="5cz-MP-9tL"/>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="centerX" secondItem="GJd-Yh-RWb" secondAttribute="centerX" id="Q3B-4B-g5h"/>
                             <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" symbolic="YES" id="SfN-ll-jLj"/>
+                            <constraint firstItem="Wdb-LP-ew2" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Th2-rt-GGk"/>
                             <constraint firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" id="Y44-ml-fuU"/>
+                            <constraint firstItem="Wdb-LP-ew2" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="YtN-YQ-jRA"/>
+                            <constraint firstItem="Wdb-LP-ew2" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="cUj-DK-ieR"/>
+                            <constraint firstItem="Wdb-LP-ew2" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="cVN-98-jhm"/>
                             <constraint firstItem="GJd-Yh-RWb" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="bottom" multiplier="1/3" constant="1" id="moa-c2-u7t"/>
                             <constraint firstItem="GJd-Yh-RWb" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" symbolic="YES" id="x7j-FC-K8j"/>
                         </constraints>

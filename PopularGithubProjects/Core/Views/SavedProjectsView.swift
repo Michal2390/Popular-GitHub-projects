@@ -16,9 +16,9 @@ struct SavedProjectsView: View {
         Group {
             if savedProjects.isEmpty {
                 ContentUnavailableView(
-                    "No Saved Projects",
+                    Constants.noSavedProjects,
                     systemImage: "bookmark",
-                    description: Text("Your saved projects will appear here")
+                    description: Text(Constants.projectUnavailableText)
                 )
             } else {
                 List {
@@ -33,7 +33,7 @@ struct SavedProjectsView: View {
                 }
             }
         }
-        .navigationTitle("Saved Projects")
+        .navigationTitle(Constants.savedProjects)
     }
     
     private func savedProjectRow(_ project: ProjectEntity) -> some View {

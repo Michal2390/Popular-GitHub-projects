@@ -20,25 +20,11 @@ struct ProjectDetailView: View {
     
     var body: some View {
         List {
-            Section {
-                headerView
-            }
-            
-            Section("Details") {
-                detailsView
-            }
-            
-            Section("License") {
-                licenseView
-            }
-            
-            Section("Dates") {
-                datesView
-            }
-            
-            Section {
-                githubLink
-            }
+            Section { headerView }
+            Section("Details") { detailsView }
+            Section("License") { licenseView }
+            Section("Dates") { datesView }
+            Section { githubLink }
         }
         .navigationTitle(project.name)
         .navigationBarTitleDisplayMode(.large)
@@ -117,7 +103,7 @@ struct ProjectDetailView: View {
                     }
                 }
             } else {
-                Text("No license information")
+                Text(Constants.noLicenseInformation)
                     .foregroundStyle(.secondary)
             }
         }
@@ -138,7 +124,7 @@ struct ProjectDetailView: View {
     private var githubLink: some View {
         Link(destination: URL(string: project.htmlUrl)!) {
             HStack {
-                Text("View on GitHub")
+                Text(Constants.viewOnGitHub)
                 Spacer()
                 Image(systemName: "arrow.up.right")
             }

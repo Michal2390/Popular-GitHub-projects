@@ -33,7 +33,7 @@ struct ProjectListingView: View {
                     .transition(.scale)
             }
         }
-        .navigationTitle("Trending Projects")
+        .navigationTitle(Constants.trendingProjects)
         .navigationDestination(for: ProjectModel.self) { project in
             ProjectDetailView(project: project)
         }
@@ -72,14 +72,12 @@ struct ProjectListingView: View {
         ScrollView {
             LazyVStack(spacing: 16) {
                 if sizeClass == .regular {
-                    // iPad Layout
                     LazyVGrid(columns: [
                         GridItem(.adaptive(minimum: 300, maximum: 400), spacing: 16)
                     ], spacing: 16) {
                         projectRows(projects)
                     }
                 } else {
-                    // iPhone Layout
                     projectRows(projects)
                 }
                 loadingIndicator
@@ -121,13 +119,14 @@ struct ProjectListingView: View {
             if !projects.isEmpty {
                 ProgressView()
                     .padding()
+                    .tint(.accent)
             }
         }
     }
     
     private func errorView(_ error: String) -> some View {
         ContentUnavailableView(
-            "Cannot Load Projects",
+            Constants.cannotLoadProjects,
             systemImage: "exclamationmark.triangle",
             description: Text(error)
         )
@@ -137,7 +136,7 @@ struct ProjectListingView: View {
     }
     
     private var retryButton: some View {
-        Button("Try Again") {
+        Button(Constants.tryAgain) {
             Task {
                 await viewModel.fetchTrendingProjects()
             }

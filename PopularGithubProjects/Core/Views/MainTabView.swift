@@ -20,11 +20,11 @@ struct MainTabView: View {
         TabView {
             NavigationStack {
                 ProjectListingView(sort: sortOrder, searchString: searchText)
-                    .navigationTitle("Trending")
+                    .navigationTitle(Constants.trending)
                     .searchable(
                         text: $searchText,
                         placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: "Search projects..."
+                        prompt: Constants.searchProjects
                     )
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
@@ -33,14 +33,14 @@ struct MainTabView: View {
                     }
             }
             .tabItem {
-                Label("Trending", systemImage: "star.fill")
+                Label(Constants.trending, systemImage: "star.fill")
             }
             
             NavigationStack {
                 SavedProjectsView()
             }
             .tabItem {
-                Label("Saved", systemImage: "bookmark.fill")
+                Label(Constants.saved, systemImage: "bookmark.fill")
             }
         }
     }

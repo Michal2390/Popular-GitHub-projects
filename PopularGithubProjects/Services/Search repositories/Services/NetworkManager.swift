@@ -20,12 +20,12 @@ protocol Networking {
 }
 
 @Observable
-class NetworkManager: Networking {
+final class NetworkManager: Networking {
     var isLoading = false
     
     func fetchTrendingRepositories(page: Int = 1) async throws -> [ProjectModel] {
         isLoading = true
-        defer { isLoading = false } //thx Antonie van der Lee ;) aka SwiftLee
+        defer { isLoading = false } //thx Antonie van der Lee ;) aka SwiftLee - I am FANCY now :D
         
         var components = URLComponents(string: Constants.API.baseURL + Constants.API.searchEndpoint)
         components?.queryItems = [
@@ -41,7 +41,7 @@ class NetworkManager: Networking {
         }
         
         var request = URLRequest(url: url)
-        request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept") //add to constants later
+        request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
         
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse else {
